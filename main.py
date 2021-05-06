@@ -20,12 +20,11 @@ def BinarySearch(lys, val):
 
 def run():
 
-    passwords_raw = open('password_list.txt', 'r')
+    print("{} started!".format(name))
 
-    for line in passwords_raw:
-        line = line.strip()
+    while True:
 
-        priv = sha256(line)
+        priv = random_key()
 
         pub = privtopub(priv)
 
@@ -43,9 +42,10 @@ def run():
             f.close()
             passwords_raw.close()
 
-    passwords_raw.close()
 
 if __name__ == '__main__':
+
+    num_threads = 12
 
     btclog = btclog.BtcLog()
 
@@ -60,4 +60,7 @@ if __name__ == '__main__':
     time2 = time.perf_counter()
     print(f"Sorted list in {time2 - time1:0.4f} seconds")
 
-    run()
+    for x in range(num_threads):
+        thread_name = "Thread-{}".format(x + 1)
+        mythread = threading.Thread(target=run, args=(thread_name,))
+        mythread.start()
